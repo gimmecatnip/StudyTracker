@@ -1,0 +1,28 @@
+Get inputs to post to the database. - Done
+Create the NAV Bar.  NAV bar items should bring user to an input screen
+    where you put the parameters (date(s)) of the dashboard you want. - NAV Bar Created
+
+Create analysis section that will display on both the Home page and daily page.  
+
+Create Daily dashboard page.  
+
+Start the Navigation bar for reporting dashboards.
+Create shell for "Daily" to display the database data.
+
+Daily Total
+Daily Goal:
+Monthly Total:
+Monthly +/-:
+Annual +/-:
+Avg Mthly Catchup:
+
+
+
+
+
+
+
+
+
+Defects/Issues:
+Controls to the "Add" button.  Make it so you can't double click (add twice).  Reset the input fields to empty.  

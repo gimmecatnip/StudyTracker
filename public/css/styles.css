@@ -1,0 +1,52 @@
+body {
+    background-color: #6B4F4F;
+}
+
+.page-title {
+    color: #eed6c4;
+}
+
+.dailyInputTitle {
+    margin: 15px;
+    padding-top: 15px;
+}
+
+.dailyAnalysisTitle {
+    margin: 15px;
+    padding-top: 15px;
+}
+
+.daily-input {
+    display: inline-block;
+    background-color: #FFF3E4;
+    height: 425px;
+    width: 25%;
+}
+
+.daily-monthly-analysis {
+    display: inline-block;
+    background-color: #FFF3E4;
+    height: 425px;
+    width: 25%;
+    margin-left: 15px;
+}
+
+.form-group {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+
+.form-item {
+    display: block;
+    padding: 15px;
+}
+
+.input-btn {
+    margin-left: 15px;
+}
+
+.footer {
+    margin-top: 25px;
+}
+
