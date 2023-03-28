@@ -8,6 +8,9 @@ const mongoose = require("mongoose");
 const { text } = require("body-parser");
 const { indexOf } = require("lodash");
 
+const annualTarget = 27000;
+const monthlyTarget = 2250;
+
 mongoose.set('strictQuery', true);
 mongoose.connect("mongodb://localhost:27017/studyTrackerDB", { useNewUrlParser: true });
 
@@ -38,11 +41,16 @@ app.get("/", function (req, res) {
     var yy = today.getFullYear();
     var monthBegin = yy + "-" + mm + "-" + "01";
     var monthEnd = yy + "-" + mm2 + "-" + "01";
+    var yearBegin = yy + "-" + "01-01";
     today = yy + "-" + mm + "-" + dd;
     var dailyTotal = 0;
     var monthlyTotal = 0;
+    var monthlyPlusMinus = 0;
+    var annualPlusMinus = 0;
+    var actualYTDMinutes = 0;
+    var avgMonthlyCatchup = 0;
     const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    let dailyGoal = Math.round(2250 / (monthDays[currentDate.getMonth()]));
+    let dailyGoal = Math.round(monthlyTarget / (monthDays[currentDate.getMonth()]));
 
     async function calcDailyTotal() {
         try {
@@ -55,7 +63,6 @@ app.get("/", function (req, res) {
         catch (err) {
             console.log(err);
         }
-
         try {
             const doc2 = await Post.find({ date: { "$gte": monthBegin, "$lt": monthEnd } });
             doc2.forEach(function (dailyRecord) {
@@ -68,7 +75,47 @@ app.get("/", function (req, res) {
         catch (err) {
             console.log(err);
         }
-        res.render("home", { dailyTotal: dailyTotal, dailyGoal: dailyGoal, monthlyTotal: monthlyTotal });
+        try {
+            monthlyPlusMinus = monthlyTotal - Math.round((monthlyTarget / (monthDays[currentDate.getMonth()])) * dd);
+        }
+        catch (err) {
+            console.log(err);
+        }
+        try {
+            const now = new Date();
+            const startOfYear = new Date(now.getFullYear(), 0, 0);
+            const diff = now - startOfYear;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayNumberOfYear = Math.floor(diff / oneDay);
+            const targetYTDMinutes = Math.floor((annualTarget / 365) * dayNumberOfYear);
+            const doc3 = await Post.find({ date: { "$gte": yearBegin, "$lte": today } });
+            doc3.forEach(function (dailyRecord) {
+                dailyRecord.activity.forEach(function (items) {
+                    actualYTDMinutes += items.minutes;
+                    return actualYTDMinutes;
+                })
+            })
+            annualPlusMinus = actualYTDMinutes - targetYTDMinutes;
+            console.log(targetYTDMinutes);
+        }
+        catch (err) {
+            console.log(err);
+        }
+        try {
+            var daysInMonth = monthDays[currentDate.getMonth()];
+            avgMonthlyCatchup = Math.floor((monthlyTarget - monthlyTotal) / (daysInMonth - dd + 1));
+        }
+        catch (err) {
+            console.log(err);
+        }
+
+
+
+        res.render("home", {
+            dailyTotal: dailyTotal, dailyGoal: dailyGoal,
+            monthlyTotal: monthlyTotal, monthlyPlusMinus: monthlyPlusMinus,
+            annualPlusMinus: annualPlusMinus, avgMonthlyCatchup: avgMonthlyCatchup
+        });
     };
 
     calcDailyTotal();

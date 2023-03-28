@@ -16,23 +16,25 @@ body {
     padding-top: 15px;
 }
 
+.flexBoxContainer {
+    display: flex;
+    flex-direction: row;
+}
+
 .daily-input {
-    display: inline-block;
     background-color: #FFF3E4;
     height: 425px;
-    width: 25%;
+    width: 300px;
 }
 
 .daily-monthly-analysis {
-    display: inline-block;
     background-color: #FFF3E4;
     height: 425px;
-    width: 25%;
+    width: 300px;
     margin-left: 15px;
 }
 
 .form-group {
-    margin-top: 30px;
     margin-bottom: 30px;
 }
 
@@ -49,4 +51,3 @@ body {
 .footer {
     margin-top: 25px;
 }
-

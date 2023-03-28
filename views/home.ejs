@@ -1,42 +1,45 @@
 <%- include("partials/header"); -%>
   <h1 class="page-title">Study Tracker 2023</h1>
 
-  <div class="daily-input">
-    <form class="" action="/dailyInput" method="post">
-      <div class="form-group">
-        <h2 class="dailyInputTitle">Daily Input</h2>
-        <div class="form-item">
-          <label>Date</label>
-          <input class="form-control" type="date" name="dateInput">
+  <div class="flexBoxContainer">
+    <div class="daily-input">
+      <form class="" action="/dailyInput" method="post">
+        <div class="form-group">
+          <h2 class="dailyInputTitle">Daily Input</h2>
+          <div class="form-item">
+            <label>Date</label>
+            <input class="form-control" type="date" name="dateInput">
+          </div>
+          <div class="form-item">
+            <label>Activity</label>
+            <input class="form-control" type="text" name="activityInput">
+          </div>
+          <div class="form-item">
+            <label>Minutes</label>
+            <input class="form-control" type="number" name="minutesInput">
+          </div>
         </div>
-        <div class="form-item">
-          <label>Activity</label>
-          <input class="form-control" type="text" name="activityInput">
-        </div>
-        <div class="form-item">
-          <label>Minutes</label>
-          <input class="form-control" type="number" name="minutesInput">
-        </div>
-      </div>
-      <button class="btn btn-primary input-btn" type="submit" name="button">Add</button>
-    </form>
+        <button class="btn btn-primary input-btn" type="submit" name="button">Add</button>
+      </form>
+    </div>
+
+    <div class="daily-monthly-analysis">
+      <h2 class="dailyAnalysisTitle">Daily Analysis</h2>
+      <ul>
+        <li>Daily Total: <%= dailyTotal %>
+        </li>
+        <li>Daily Goal: <%= dailyGoal %>
+        </li>
+        <li>Monthly Total: <%=monthlyTotal %>
+        </li>
+        <li>Monthy +/-: <%= monthlyPlusMinus %>
+        </li>
+        <li>Annual +/-: <%= annualPlusMinus %>
+        </li>
+        <li>Avg Mthly Catchup:<%= avgMonthlyCatchup %>
+        </li>
+      </ul>
+    </div>
   </div>
-
-  <div class="daily-monthly-analysis">
-    <h2 class="dailyAnalysisTitle">Daily Analysis</h2>
-    <ul>
-      <li>Daily Total: <%= dailyTotal %>
-      </li>
-      <li>Daily Goal: <%= dailyGoal %>
-      </li>
-      <li>Monthly Total: <%=monthlyTotal %>
-      </li>
-      <li>Monthy +/-:</li>
-      <li>Annual +/-:</li>
-      <li>Avg Mthly Catchup:</li>
-    </ul>
-
-  </div>
-
 
   <%- include("partials/footer"); -%>
