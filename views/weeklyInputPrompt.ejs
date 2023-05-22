@@ -1,0 +1,20 @@
+<%- include("partials/header"); -%>
+    <h1 class="page-title">Enter Date for Weekly Analysis:</h1>
+
+    <div class="daily-input-screen-box">
+        <form class="" action="/weeklyAnalysis" method="post">
+            <div class="form-group">
+                <h2 class="dailyInputTitle">Date:</h2>
+                <div class="form-item">
+                    <label>Date</label>
+                    <input class="form-control" type="date" name="dateInput">
+                </div>
+            </div>
+            <button class="btn btn-primary input-btn" type="submit" name="button">Submit</button>
+        </form>
+    </div>
+
+
+
+
+    <%- include("partials/footer"); -%>

@@ -1,0 +1,29 @@
+<%- include("partials/header"); -%>
+    <h1 class="page-title">Daily Analysis</h1>
+
+    <div class="daily-monthly-analysis">
+        <h2 class="dailyAnalysisTitle">Date: <%= formattedDate %>
+        </h2>
+        <ul>
+            <li>Daily Total: <%= dailyTotal %>
+            </li>
+            <li>Daily Goal: <%= dailyGoal %>
+            </li>
+        </ul>
+        <ul>
+            <li><b>Activities</b></li>
+            <% activityArray.activity.forEach(function(dailyTask){ %>
+                <li>
+                    <%= dailyTask.item %>: <%= dailyTask.minutes %>
+                </li>
+                <% }) %>
+
+        </ul>
+
+    </div>
+
+
+
+
+
+    <%- include("partials/footer"); -%>
