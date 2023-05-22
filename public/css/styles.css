@@ -34,6 +34,12 @@ body {
     margin-left: 15px;
 }
 
+.daily-input-screen-box {
+    background-color: #FFF3E4;
+    height: 250px;
+    width: 300px;
+}
+
 .form-group {
     margin-bottom: 30px;
 }

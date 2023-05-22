@@ -2,27 +2,62 @@ Get inputs to post to the database. - Done
 Create the NAV Bar.  NAV bar items should bring user to an input screen
     where you put the parameters (date(s)) of the dashboard you want. - NAV Bar Created
 
-Create analysis section that will display on both the Home page and daily page.  
+Create analysis section that will display on both the Home page and daily page.  - Done
 
-Create Daily dashboard page.  
+Create Daily dashboard page.
 
-Start the Navigation bar for reporting dashboards.
-Create shell for "Daily" to display the database data.
-
-Daily Total
-Daily Goal:
-Monthly Total:
-Monthly +/-:
-Annual +/-:
-Avg Mthly Catchup:
-
+1. Clicking on "Daily" NavBar should bring up an input of parameters screen
+ (perhaps a popup?).  Done.  But the date I input doesn't do anything yet.  
+ 2. Add form to accept the date wanted.  Done
+ 3. Submission of form should render a new EJS page with Daily Analysis for 
+    day selected.  Renders the Daily Analysis page and data format, 
+    but needs to take into consideration the date input and render that specific information.  
+    Might need to reassess what the monthly and annual figures are to do on this screen.  
+4.  Add a "Home" navigation link onto the page.  
 
 
 
 
+        <ul>
+            <li><b>Activities</b></li>
+            <% activityArray.activity.forEach(function(items){ %>
+                <li>
+                    <%= items.item %>
+                </li>
+                <li>
+                    <%= items.minutes %>
+                </li>
+                <% }) %>
+        </ul>
 
+        res.render("dailyAnalysis", {
+            dailyTotal: dailyTotal, dailyGoal: dailyGoal,
+            monthlyTotal: monthlyTotal, monthlyPlusMinus: monthlyPlusMinus,
+            annualPlusMinus: annualPlusMinus, avgMonthlyCatchup: avgMonthlyCatchup,
+            formattedDate: formattedDate, activityArray: activityArray
+        });
+
+
+Test Data (5/6/23)
+January - 2 dates, multiple items on each day. - Done
+February - same - Done
+March - same - Done
+April - same, + 4/30 data for weekly crossing over monthend.
+    multiple items in same week, not crossing over monthend, for weekly testing. - Done
+May - Multiple days, multiple items.  First week items.  5/8 - Done
+
+Use 3 different event types:  PHP, Javascript, do.com
+
+
+What I need to send to the Weekly Analysis Page: 
+1.  Start date - Done.  Future daylight savings may be an issue. 
+2.  End date - Done.  Future daylight savings may be an issue.
+3.  Weekly Total - Done
+4.  Activity Array - Done
 
 
 
 Defects/Issues:
-Controls to the "Add" button.  Make it so you can't double click (add twice).  Reset the input fields to empty.  
+Home Page: Controls to the "Add" button.  Make it so you can't double click (add twice).  Reset the input fields to empty.
+
+Crashes when there is no data.  Needs to be able to handle empty data sets.  
