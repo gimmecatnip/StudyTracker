@@ -1,0 +1,24 @@
+<%- include("partials/header"); -%>
+    <h1 class="page-title">Enter Year for Annual Analysis:</h1>
+
+    <div class="daily-input-screen-box">
+        <form class="" action="/yearlyAnalysis" method="post">
+            <div class="form-group">
+                <h2 class="dailyInputTitle">Choose the year:</h2>
+                <div class="form-item">
+                    <label>Year</label>
+                    <select id="selectedYear" name="selectedYear" size="1">
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary input-btn" type="submit" name="button">Submit</button>
+        </form>
+    </div>
+
+
+
+
+    <%- include("partials/footer"); -%>

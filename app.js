@@ -7,7 +7,7 @@ const _ = require("lodash");
 const mongoose = require("mongoose");
 const { text } = require("body-parser");
 const { indexOf } = require("lodash");
-const { startOfWeek, endOfWeek, format, addHours } = require("date-fns");
+const { startOfWeek, endOfWeek, startOfMonth, endOfMonth, format, addHours } = require("date-fns");
 
 const annualTarget = 27000;
 const monthlyTarget = 2250;
@@ -117,12 +117,12 @@ app.get("/", function (req, res) {
             annualPlusMinus: annualPlusMinus, avgMonthlyCatchup: avgMonthlyCatchup
         });
     };
-
     calcDailyTotal();
 }
 );
 
 app.post("/dailyInput", function (req, res) {
+
     Post.findOne({ date: req.body.dateInput, "activity.item": req.body.activityInput }, function (err, result) {
         if (err) {
             console.log(err);
@@ -177,9 +177,10 @@ app.post("/dailyAnalysis", function (req, res) {
     let inputDate = new Date(req.body.dateInput);
     let currentDate = new Date();
     var today = new Date();
-    var dd = String(inputDate.getDate() + 1).padStart(2, '0');
-    var mm = String(inputDate.getMonth() + 1).padStart(2, '0');
-    var mm2 = String(inputDate.getMonth() + 2).padStart(2, '0');
+    var adjustedInputDate = addHours(inputDate, +4);
+    var dd = String(adjustedInputDate.getDate()).padStart(2, '0');
+    var mm = String(adjustedInputDate.getMonth() + 1).padStart(2, '0');
+    var mm2 = String(adjustedInputDate.getMonth() + 2).padStart(2, '0');
     var yy = inputDate.getFullYear();
     var formattedDate = mm + "/" + dd + "/" + yy;
     var monthBegin = yy + "-" + mm + "-" + "01";
@@ -299,7 +300,11 @@ app.post("/weeklyAnalysis", function (req, res) {
         var formattedlastDay = mm2 + "/" + dd2 + "/" + yy2;
 
         try {
-            const weeklyArray = await Post.find({ date: { "$gte": adjustedFirstDay, "$lte": adjustedLastDay } });
+            const weeklyArray = await Post.find({
+                date: {
+                    "$gte": adjustedFirstDay, "$lte": adjustedLastDay
+                }
+            });
             const consolidatedArray = [];
             function ActivityObject(task, time) {
                 this.activity = task;
@@ -337,12 +342,213 @@ app.post("/weeklyAnalysis", function (req, res) {
             formattedfirstDay: formattedfirstDay, formattedlastDay: formattedlastDay,
             finalArray: finalArray, weeklyTotal: weeklyTotal
         });
-
-    }
-
+    };
     getWeeklyFigures();
+});
 
-})
+// Monthly Analysis
+app.get("/monthlyInputPrompt", function (req, res) {
+    res.render("monthlyInputPrompt");
+});
+
+app.post("/monthlyAnalysis", function (req, res) {
+    let currentDate = new Date();
+    let inputDate = new Date(req.body.dateInput);
+    let firstDay;
+    let lastDay;
+    const finalArray = [];
+
+    async function getMonthlyFigures() {
+        const adjustedInputDate = addHours(inputDate, +4);
+        firstDay = startOfMonth(adjustedInputDate);
+        lastDay = endOfMonth(adjustedInputDate);
+        const adjustedFirstDay = addHours(firstDay, -4);  // used in the db search.
+        const adjustedLastDay = addHours(lastDay, -4);  // used in the db search.
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+        const month = adjustedInputDate.getMonth();
+        const monthName = monthNames[month];
+        const relativeYear = adjustedInputDate.getFullYear();
+
+        try {
+            const monthlyArray = await Post.find({ date: { "$gte": adjustedFirstDay, "$lte": adjustedLastDay } });
+            const consolidatedArray = [];
+            function ActivityObject(task, time) {
+                this.activity = task;
+                this.minutes = time;
+            };
+            monthlyArray.forEach(function (dailyRecord) {
+                dailyRecord.activity.forEach(function (eachActivity) {
+                    let newActivity = new ActivityObject(eachActivity.item, eachActivity.minutes);
+                    consolidatedArray.push(newActivity);
+                })
+            })
+            consolidatedArray.forEach(function (eachItem) {
+                if (finalArray.length === 0) {
+                    finalArray.push(eachItem);
+                } else {
+                    if (!finalArray.some(e => e.activity === eachItem.activity)) {
+                        finalArray.push(eachItem);
+                    } else {
+                        var index = finalArray.findIndex(p => p.activity === eachItem.activity);
+                        finalArray[index].minutes += eachItem.minutes;
+                    }
+                }
+            })
+            var monthlyTotal = 0;
+            finalArray.forEach(function (activityObject) {
+                monthlyTotal += activityObject.minutes;
+            })
+            var monthlyTotalPercent = Math.round((monthlyTotal / monthlyTarget) * 100);
+            const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            let dailyGoal = Math.round(monthlyTarget / (monthDays[currentDate.getMonth()]));
+            var dd = String(currentDate.getDate()).padStart(2, '0');
+
+            var ifCurrentMonth = String(currentDate.getMonth()).padStart(2, '0');
+            var ifInputMonth = String(adjustedInputDate.getMonth()).padStart(2, '0');
+            var expectedProgress;
+            if (ifCurrentMonth > ifInputMonth) {
+                expectedProgress = 2250;
+            } else {
+                expectedProgress = dailyGoal * dd;
+            }
+            var expectedProgPlusMinus = monthlyTotal - expectedProgress;
+
+
+        }
+        catch (err) {
+            console.log(err);
+        }
+
+        res.render("monthlyAnalysis", {
+            inputDate: inputDate, monthName: monthName, relativeYear: relativeYear,
+            monthlyTotal: monthlyTotal, monthlyTotalPercent: monthlyTotalPercent,
+            expectedProgress: expectedProgress, expectedProgPlusMinus: expectedProgPlusMinus,
+            finalArray: finalArray
+        });
+    };
+    getMonthlyFigures();
+});
+
+
+// Yearly Analysis
+app.get("/yearlyInputPrompt", function (req, res) {
+    res.render("yearlyInputPrompt");
+});
+
+app.post("/yearlyAnalysis", function (req, res) {
+    let yearSelected = req.body.selectedYear;
+    let beginningYear = yearSelected + "-01-01";
+    let endingYear = yearSelected + "-12-31";
+    let beginningYearDate = new Date(beginningYear);
+    let endingYearDate = new Date(endingYear);
+    let begMonthDay = [];
+    let endMonthDay = [];
+    let finalArray = [];
+    let currentDate = new Date();
+    let minutesBehind;
+
+    async function getAnnualFigures() {
+
+        try {
+            const annualArray = await Post.find({
+                date: {
+                    "$gte": beginningYearDate,
+                    "$lte": endingYearDate
+                }
+            });
+            const consolidatedYearlyArray = [];
+            function ActivityObject(task, time) {
+                this.activity = task;
+                this.minutes = time;
+            };
+            annualArray.forEach(function (dailyRecord) {
+                dailyRecord.activity.forEach(function (eachActivity) {
+                    let newActivity = new ActivityObject(eachActivity.item, eachActivity.minutes);
+                    consolidatedYearlyArray.push(newActivity);
+                })
+            })
+
+            consolidatedYearlyArray.forEach(function (eachItem) {
+                if (finalArray.length === 0) {
+                    finalArray.push(eachItem);
+                } else {
+                    if (!finalArray.some(e => e.activity === eachItem.activity)) {
+                        finalArray.push(eachItem);
+                    } else {
+                        var index = finalArray.findIndex(p => p.activity ===
+                            eachItem.activity);
+                        finalArray[index].minutes += eachItem.minutes;
+                    }
+                }
+            })
+            var yearlyTotal = 0;
+            finalArray.forEach(function (activityObject) {
+                yearlyTotal += activityObject.minutes;
+            })
+            var yearlyTotalPercentage = Math.round((yearlyTotal / annualTarget) * 100);
+
+            var monthDates = ["-01-01", "-02-01", "-03-01", "-04-01", "-05-01", "-06-01",
+                "-07-01", "-08-01", "-09-01", "-10-01", "-11-01", "-12-01", "-12-31"];
+            var indivMonthsArray = [];
+            var indivMonthsMinutes = [];
+
+            for (let i = 0; i <= 11; i++) {
+                if (i <= 10) {
+                    var gtDate = yearSelected + monthDates[i];
+                    var ltDate = yearSelected + monthDates[i + 1];
+                    const oneMonthArray = await Post.find({
+                        date: { "$gte": gtDate, "$lt": ltDate }
+                    });
+                    indivMonthsArray.push(oneMonthArray);
+
+                } else if (i === 11) {
+                    var gtDate = yearSelected + monthDates[11];
+                    var ltDate = yearSelected + monthDates[12];
+                    const decemberArray = await Post.find({
+                        date: { "$gte": gtDate, "$lte": ltDate }
+                    })
+                    indivMonthsArray.push(decemberArray);
+                }
+            }
+
+            indivMonthsArray.forEach(function (eachMonthArray) {
+                var monthTotalMinutes = 0;
+                eachMonthArray.forEach(function (eachDayObject) {
+                    eachDayObject.activity.forEach(function (eachActivity) {
+                        monthTotalMinutes += eachActivity.minutes;
+                    })
+                })
+                indivMonthsMinutes.push(monthTotalMinutes);
+            })
+            // add code to get the minutes behind calculation here.
+            const dayOfYear = date =>
+                Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+            const dayOfTheYear = dayOfYear(new Date());
+            const currentYear = currentDate.getFullYear();
+            if (currentYear > yearSelected) {
+                minutesBehind = annualTarget - yearlyTotal;
+                console.log(minutesBehind);
+            } else if (currentYear == yearSelected) {
+                minutesBehind = Math.floor(((annualTarget / 365) * dayOfTheYear) - yearlyTotal);
+                console.log(minutesBehind);
+            } else {
+                minutesBehind = 0;
+            };
+        }
+        catch (err) {
+            console.log(err);
+        }
+        res.render("yearlyAnalysis", {
+            yearSelected: yearSelected, yearlyTotal: yearlyTotal,
+            yearlyTotalPercentage: yearlyTotalPercentage,
+            indivMonthsMinutes: indivMonthsMinutes, minutesBehind: minutesBehind
+        });
+    }
+    getAnnualFigures();
+});
+
+
 
 app.listen(4000, function () {
     console.log("Server started on port 4000.")

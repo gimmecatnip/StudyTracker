@@ -1,0 +1,62 @@
+<%- include("partials/header") %>
+        <h1 class="page-title">Yearly Analysis</h1>
+
+        <div class="daily-monthly-analysis">
+                <h2 class="dailyAnalysisTitle">
+                        <%= yearSelected %>
+                </h2>
+
+                <ul>
+                        <li>Total Minutes: <%= yearlyTotal %> /
+                                        <%= yearlyTotalPercentage %>%</li>
+                        <li>Minutes Behind: <%= minutesBehind %>
+                        </li><br>
+                        <li>Jan: <%= indivMonthsMinutes[0] %> /
+                                        <%= Math.round((indivMonthsMinutes[0] / 2250)*100) %>%
+                        </li>
+                        <li>Feb: <%= indivMonthsMinutes[1] %> /
+                                        <%= Math.round((indivMonthsMinutes[1] / 2250)*100) %>%
+                        </li>
+                        <li>Mar: <%= indivMonthsMinutes[2] %> /
+                                        <%= Math.round((indivMonthsMinutes[2] / 2250)*100) %>%
+                        </li>
+                        <li>Apr: <%= indivMonthsMinutes[3] %> /
+                                        <%= Math.round((indivMonthsMinutes[3] / 2250)*100) %>%
+                        </li>
+                        <li>May: <%= indivMonthsMinutes[4] %> /
+                                        <%= Math.round((indivMonthsMinutes[4] / 2250) *100) %>%
+                        </li>
+                        <li>Jun: <%= indivMonthsMinutes[5] %> /
+                                        <%= Math.round((indivMonthsMinutes[5] / 2250) * 100) %>%
+                        </li>
+                        <li>Jul: <%= indivMonthsMinutes[6] %> /
+                                        <%= Math.round((indivMonthsMinutes[6] / 2250) * 100) %>%
+                        </li>
+                        <li>Aug: <%= indivMonthsMinutes[7] %> /
+                                        <%= Math.round((indivMonthsMinutes[7] / 2250) * 100) %>%
+                        </li>
+                        <li>Sep: <%= indivMonthsMinutes[8] %> /
+                                        <%= Math.round((indivMonthsMinutes[8] / 2250) * 100) %>%
+                        </li>
+                        <li>Oct: <%= indivMonthsMinutes[9] %> /
+                                        <%= Math.round((indivMonthsMinutes[9] / 2250) * 100) %>%
+                        </li>
+                        <li>Nov: <%= indivMonthsMinutes[10] %> /
+                                        <%= Math.round((indivMonthsMinutes[10] / 2250) * 100) %>%
+                        </li>
+                        <li>Dec: <%= indivMonthsMinutes[11] %> /
+                                        <%= Math.round((indivMonthsMinutes[10] / 2250) * 100) %>%
+                        </li>
+
+
+                </ul>
+
+
+        </div>
+
+
+
+
+
+
+        <%- include("partials/footer") %>

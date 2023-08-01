@@ -1,0 +1,36 @@
+<%- include("partials/header") %>
+    <h1 class="page-title">Monthly Analysis</h1>
+
+    <div class="daily-monthly-analysis">
+        <h2 class="dailyAnalysisTitle">
+            <%= monthName %>
+                <%= relativeYear %>
+        </h2>
+        <ul>
+            <li>Monthly Total: <%= monthlyTotal %>
+            </li>
+            <li>Monthly Progress: <%= monthlyTotalPercent %>%</li>
+            <li>Expected Progress: <%= expectedProgress %>
+            </li>
+            <li>Expected Progress +/-: <%= expectedProgPlusMinus %>
+            </li>
+        </ul>
+        <ul>
+            <li><b>Activities</b></li>
+            <% finalArray.forEach(function(dailyTask){ %>
+                <li>
+                    <%= dailyTask.activity %>: <%= dailyTask.minutes %>
+                </li>
+                <% }) %>
+
+
+        </ul>
+
+    </div>
+
+
+
+
+
+
+    <%- include("partials/footer") %>

@@ -57,3 +57,8 @@ body {
 .footer {
     margin-top: 25px;
 }
+
+#selectedYear {
+    width: 100px;
+    text-align: center;
+}

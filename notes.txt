@@ -17,27 +17,6 @@ Create Daily dashboard page.
 
 
 
-
-        <ul>
-            <li><b>Activities</b></li>
-            <% activityArray.activity.forEach(function(items){ %>
-                <li>
-                    <%= items.item %>
-                </li>
-                <li>
-                    <%= items.minutes %>
-                </li>
-                <% }) %>
-        </ul>
-
-        res.render("dailyAnalysis", {
-            dailyTotal: dailyTotal, dailyGoal: dailyGoal,
-            monthlyTotal: monthlyTotal, monthlyPlusMinus: monthlyPlusMinus,
-            annualPlusMinus: annualPlusMinus, avgMonthlyCatchup: avgMonthlyCatchup,
-            formattedDate: formattedDate, activityArray: activityArray
-        });
-
-
 Test Data (5/6/23)
 January - 2 dates, multiple items on each day. - Done
 February - same - Done
@@ -55,9 +34,43 @@ What I need to send to the Weekly Analysis Page:
 3.  Weekly Total - Done
 4.  Activity Array - Done
 
+Monthly Analysis page
+1. The month title - Done
+2. Monthly Total - Done
+3. Monthly Total % - Done
+4. Monthly expected Total - Done
+5. Monthly expected % - maybe not necessary.
+6. Minutes behind - Done
+7. Activities - Done
+
+Minimum Viable Product:
+1. Get Monthly page working.  - Done
+2. Monthly page - Totals and catchup figures work. NA - on the Home page.
+3. Get Yearly page up and running. - Done
+4. Yearly page - Totals and minutes behind. - Done
+5. Yearly page - Show monthly figures separately with %s. - Done
+6. Update data with real data.
+7. Test against excel; continue to parallel. 
+
+Yearly Page
+1.  Title = "Annual Summary - 2023" - Done; just "2023"
+2.  List Jan-Dec with total minutes and %.  - Done
+3.  Annual Minutes +/-.  Not going to do here;
+4.  Minutes behind.  Get it on the Yearly Page.  - Done
+
 
 
 Defects/Issues:
 Home Page: Controls to the "Add" button.  Make it so you can't double click (add twice).  Reset the input fields to empty.
+Daily Analysis - each day shows up as the prior day.  1st day shows as prior month. 
+Try to adjust the input date (req.body.input) by 4 hours.  Is it just the display name?
+
+Daily Analysis Results:  Correct data.  Date displayed is the prior date.  
+Weekly Analysis Page: Dates displayed are correct.  Data chops off the first day 
+    data, adds the next day data(the 8th day).
+Monthly Analysis Page:  January Data is in.  Date displays correctly.
+
+
+
 
 Crashes when there is no data.  Needs to be able to handle empty data sets.  
