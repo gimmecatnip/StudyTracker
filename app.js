@@ -177,11 +177,11 @@ app.post("/dailyAnalysis", function (req, res) {
     let inputDate = new Date(req.body.dateInput);
     let currentDate = new Date();
     var today = new Date();
-    var adjustedInputDate = addHours(inputDate, +4);
+    var adjustedInputDate = addHours(inputDate, +5);
     var dd = String(adjustedInputDate.getDate()).padStart(2, '0');
     var mm = String(adjustedInputDate.getMonth() + 1).padStart(2, '0');
     var mm2 = String(adjustedInputDate.getMonth() + 2).padStart(2, '0');
-    var yy = inputDate.getFullYear();
+    var yy = adjustedInputDate.getFullYear();
     var formattedDate = mm + "/" + dd + "/" + yy;
     var monthBegin = yy + "-" + mm + "-" + "01";
     var monthEnd = yy + "-" + mm2 + "-" + "01";
@@ -252,8 +252,6 @@ app.post("/dailyAnalysis", function (req, res) {
         catch (err) {
             console.log(err);
         }
-        // This is where I attempt to deal with getting the activities.
-        //  I can't seem to get activityArray to render in the EJS. 
 
         try {
             const activityDoc = await Post.find({ date: inputDate });
@@ -283,11 +281,12 @@ app.post("/weeklyAnalysis", function (req, res) {
     let lastDay;
     const finalArray = [];
     async function getWeeklyFigures() {
-        const adjustedInputDate = addHours(inputDate, +4);
+        const adjustedInputDate = addHours(inputDate, +5);
         firstDay = startOfWeek(adjustedInputDate);
         lastDay = endOfWeek(adjustedInputDate);
-        const adjustedFirstDay = addHours(firstDay, -4);
-        const adjustedLastDay = addHours(lastDay, -4);
+        const adjustedFirstDay = addHours(firstDay, -5);
+        const adjustedLastDay = addHours(lastDay, -5);
+        // Will these "-5"s need to change with daylight savings?  
         var dd = String(firstDay.getDate()).padStart(2, '0');
         var dd2 = String(lastDay.getDate()).padStart(2, '0');
         var mm = String(firstDay.getMonth() + 1).padStart(2, '0');
@@ -359,11 +358,11 @@ app.post("/monthlyAnalysis", function (req, res) {
     const finalArray = [];
 
     async function getMonthlyFigures() {
-        const adjustedInputDate = addHours(inputDate, +4);
+        const adjustedInputDate = addHours(inputDate, +5);
         firstDay = startOfMonth(adjustedInputDate);
         lastDay = endOfMonth(adjustedInputDate);
-        const adjustedFirstDay = addHours(firstDay, -4);  // used in the db search.
-        const adjustedLastDay = addHours(lastDay, -4);  // used in the db search.
+        const adjustedFirstDay = addHours(firstDay, -5);  // used in the db search.
+        const adjustedLastDay = addHours(lastDay, -5);  // used in the db search.
         const monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"];
         const month = adjustedInputDate.getMonth();

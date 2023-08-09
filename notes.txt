@@ -1,48 +1,3 @@
-Get inputs to post to the database. - Done
-Create the NAV Bar.  NAV bar items should bring user to an input screen
-    where you put the parameters (date(s)) of the dashboard you want. - NAV Bar Created
-
-Create analysis section that will display on both the Home page and daily page.  - Done
-
-Create Daily dashboard page.
-
-1. Clicking on "Daily" NavBar should bring up an input of parameters screen
- (perhaps a popup?).  Done.  But the date I input doesn't do anything yet.  
- 2. Add form to accept the date wanted.  Done
- 3. Submission of form should render a new EJS page with Daily Analysis for 
-    day selected.  Renders the Daily Analysis page and data format, 
-    but needs to take into consideration the date input and render that specific information.  
-    Might need to reassess what the monthly and annual figures are to do on this screen.  
-4.  Add a "Home" navigation link onto the page.  
-
-
-
-Test Data (5/6/23)
-January - 2 dates, multiple items on each day. - Done
-February - same - Done
-March - same - Done
-April - same, + 4/30 data for weekly crossing over monthend.
-    multiple items in same week, not crossing over monthend, for weekly testing. - Done
-May - Multiple days, multiple items.  First week items.  5/8 - Done
-
-Use 3 different event types:  PHP, Javascript, do.com
-
-
-What I need to send to the Weekly Analysis Page: 
-1.  Start date - Done.  Future daylight savings may be an issue. 
-2.  End date - Done.  Future daylight savings may be an issue.
-3.  Weekly Total - Done
-4.  Activity Array - Done
-
-Monthly Analysis page
-1. The month title - Done
-2. Monthly Total - Done
-3. Monthly Total % - Done
-4. Monthly expected Total - Done
-5. Monthly expected % - maybe not necessary.
-6. Minutes behind - Done
-7. Activities - Done
-
 Minimum Viable Product:
 1. Get Monthly page working.  - Done
 2. Monthly page - Totals and catchup figures work. NA - on the Home page.
@@ -61,14 +16,20 @@ Yearly Page
 
 
 Defects/Issues:
-Home Page: Controls to the "Add" button.  Make it so you can't double click (add twice).  Reset the input fields to empty.
-Daily Analysis - each day shows up as the prior day.  1st day shows as prior month. 
-Try to adjust the input date (req.body.input) by 4 hours.  Is it just the display name?
+Home Page: Controls to the "Add" button.  Make it so you can't double click (add twice).  
+Reset the input fields to empty.
+Daily Analysis - each day shows up as the prior day.  1st day shows as prior month.  
+Is it just the display name?
+I think I fixed this by adding 5 hours to the adjustedInputeDate instead of just 4 hours. 
 
-Daily Analysis Results:  Correct data.  Date displayed is the prior date.  
+Daily Analysis Results:  Correct data.  Date displayed is the prior date.  Fixed, see above.
 Weekly Analysis Page: Dates displayed are correct.  Data chops off the first day 
-    data, adds the next day data(the 8th day).
-Monthly Analysis Page:  January Data is in.  Date displays correctly.
+    data, adds the next day data(the 8th day).  Try adjusting the input date by 5 hours.
+    instead of 4. Fixed!
+Monthly Analysis Page:  January Data is in.  Date displays correctly.  Similar issues.  
+    When choosing 1/1/23, returns 1/1/23 data only, and displays December 2022 title. 
+    When choosing mid-month date, returns January data minus 1/1/23 and plus 2/1/23 data. 
+     
 
 
 
