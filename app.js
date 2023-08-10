@@ -527,10 +527,8 @@ app.post("/yearlyAnalysis", function (req, res) {
             const currentYear = currentDate.getFullYear();
             if (currentYear > yearSelected) {
                 minutesBehind = annualTarget - yearlyTotal;
-                console.log(minutesBehind);
             } else if (currentYear == yearSelected) {
                 minutesBehind = Math.floor(((annualTarget / 365) * dayOfTheYear) - yearlyTotal);
-                console.log(minutesBehind);
             } else {
                 minutesBehind = 0;
             };
